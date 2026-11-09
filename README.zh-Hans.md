@@ -1,8 +1,8 @@
 [English][readme-en] | [简体中文][readme-zh-hans] | [繁体中文][readme-zh-hant]
 
-[readme-en]: https://github.com/akiirui/mpv-handler/blob/main/README.md
-[readme-zh-hans]: https://github.com/akiirui/mpv-handler/blob/main/README.zh-Hans.md
-[readme-zh-hant]: https://github.com/akiirui/mpv-handler/blob/main/README.zh-Hant.md
+[readme-en]: https://github.com/xlilu/mpv-handler/blob/main/README.md
+[readme-zh-hans]: https://github.com/xlilu/mpv-handler/blob/main/README.zh-Hans.md
+[readme-zh-hant]: https://github.com/xlilu/mpv-handler/blob/main/README.zh-Hant.md
 
 # mpv handler
 
@@ -196,9 +196,9 @@ proxy = "http://example.com:8080"
 [badges-play-with-mpv]: https://img.shields.io/greasyfork/v/416271?style=for-the-badge&logo=greasyfork&label=play-with-mpv
 [download-aur-git]: https://aur.archlinux.org/packages/mpv-handler-git/
 [download-aur]: https://aur.archlinux.org/packages/mpv-handler/
-[download-linux]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-linux-amd64.zip
-[download-macos]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-macos-universal.zip
-[download-windows]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-windows-amd64.zip
+[download-linux]: https://github.com/xlilu/mpv-handler/releases/latest/download/mpv-handler-linux-amd64.zip
+[download-macos]: https://github.com/xlilu/mpv-handler/releases/latest/download/mpv-handler-macos-universal.zip
+[download-windows]: https://github.com/xlilu/mpv-handler/releases/latest/download/mpv-handler-windows-amd64.zip
 [greasyfork-play-with-mpv]: https://greasyfork.org/scripts/416271-play-with-mpv
 [homebrew]: https://brew.sh/
 [linuxuprising]: https://www.linuxuprising.com/2021/07/open-youtube-and-more-videos-from-your.html
