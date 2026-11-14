@@ -94,7 +94,7 @@ registers both schemes with LaunchServices.
 #### One-command installation
 
 - ```
-  curl -fsSL https://raw.githubusercontent.com/akiirui/mpv-handler/main/share/macos/remote-install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/xlilu/mpv-handler/main/share/macos/remote-install.sh | sh
   ```
 
 The script downloads the latest release archive, verifies its sha512

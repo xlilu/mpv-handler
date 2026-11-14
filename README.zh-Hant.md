@@ -91,7 +91,7 @@ macOS 沒有 `.desktop` 文件或註冊表項那樣的機制：協議處理程�
 #### 一行命令安裝
 
 - ```
-  curl -fsSL https://raw.githubusercontent.com/akiirui/mpv-handler/main/share/macos/remote-install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/xlilu/mpv-handler/main/share/macos/remote-install.sh | sh
   ```
 
 該腳本下載最新 release 壓縮包、校驗其 sha512 後，運行包內自帶的 `install.sh`。安裝選項放在 `sh -s --` 之後，例如 `| sh -s -- -d /Applications`。

@@ -1,24 +1,24 @@
 #!/bin/sh
 # One-line installer for mpv-handler on macOS.
 #
-#   curl -fsSL https://raw.githubusercontent.com/akiirui/mpv-handler/main/share/macos/remote-install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/xlilu/mpv-handler/main/share/macos/remote-install.sh | sh
 #
 # Downloads the latest release archive, verifies its sha512 checksum and
 # hands over to the install.sh shipped inside the archive, which assembles
 # and registers mpv-handler.app.
 #
 # Environment, set on the sh that runs this script, i.e. after the pipe:
-#   MPV_HANDLER_REPO  owner/repo to download from (default: akiirui/mpv-handler)
+#   MPV_HANDLER_REPO  owner/repo to download from (default: xlilu/mpv-handler)
 #   MPV_HANDLER_TAG   release tag to pin instead of "latest"
 #
-#   curl -fsSL https://raw.githubusercontent.com/akiirui/mpv-handler/main/share/macos/remote-install.sh \
+#   curl -fsSL https://raw.githubusercontent.com/xlilu/mpv-handler/main/share/macos/remote-install.sh \
 #     | MPV_HANDLER_TAG=macos-0.4.2-2 sh
 #
 # Arguments are passed to install.sh, e.g.  | sh -s -- -d /Applications
 
 set -eu
 
-REPO=${MPV_HANDLER_REPO:-akiirui/mpv-handler}
+REPO=${MPV_HANDLER_REPO:-xlilu/mpv-handler}
 TAG=${MPV_HANDLER_TAG:-latest}
 ASSET="mpv-handler-macos-universal.zip"
 
