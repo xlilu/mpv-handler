@@ -57,49 +57,68 @@ bundle="$stage/$name"
 resources="$bundle/Contents/Resources"
 printf '%s\n' "$prefix" > "$resources/brew-prefix"
 cat > "$resources/open-url" <<'SH'
-#!/bin/bash
+#!/bin/sh
 set -eu
-
-# Terminal runs this copy as its startup shell. Claim one request, even if
-# the user opens another tab in the same Terminal instance.
-if [[ $# -eq 0 && ${0##*/} == start ]]; then
-    dir=${0%/*}
-    if ! /bin/mv "$dir/request" "$dir/playing" 2>/dev/null; then
-        exec /usr/bin/login -fpq "$(/usr/bin/id -un)"
-    fi
-    {
-        IFS= read -r -d '' handler
-        IFS= read -r -d '' url
-        IFS= read -r -d '' PATH
-        IFS= read -r -d '' HOME
-        IFS= read -r -d '' XDG_CONFIG_HOME
-    } < "$dir/playing"
-    /bin/rm -f "$dir/playing"
-    export PATH HOME XDG_CONFIG_HOME
-    exec "$handler" "$url"
-fi
-
-[[ $# -eq 1 ]] || exit 1
-IFS= read -r prefix < "${0%/*}/brew-prefix"
-export PATH="$prefix/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-handler="$prefix/opt/mpv-handler/bin/mpv-handler"
+[ "$#" -eq 1 ] || exit 1
 case $1 in
-    mpv-handler://*) exec "$handler" "$1" ;;
-    mpv-handler-debug://*) ;;
+    mpv-handler-debug://*) exec "${0%/*}/debug-terminal" "$1" ;;
+    mpv-handler://*) ;;
     *) exit 1 ;;
 esac
-
-# Only the generated startup path is passed to Terminal. Keep the URL and
-# paths as NUL-delimited data so they never become shell command text.
-umask 077
-dir=$(/usr/bin/mktemp -d /tmp/mpv-handler.XXXXXXXX)
-trap '/bin/rm -f "$dir/start" "$dir/request" "$dir/playing"; /bin/rmdir "$dir"' EXIT
-trap 'exit 1' HUP INT TERM
-/usr/bin/install -m 700 "$0" "$dir/start"
-printf '%s\0' "$handler" "$1" "$PATH" "$HOME" "${XDG_CONFIG_HOME:-}" > "$dir/request"
-/usr/bin/open -n -W -b com.apple.Terminal --args -Shell "$dir/start"
+exec "${0%/*}/play" "$1"
 SH
-chmod 755 "$resources/open-url"
+
+cat > "$resources/play" <<'SH'
+#!/bin/sh
+set -eu
+IFS= read -r prefix < "${0%/*}/brew-prefix"
+export PATH="$prefix/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+exec "$prefix/opt/mpv-handler/bin/mpv-handler" "$1"
+SH
+
+cat > "$resources/debug-terminal" <<'PERL'
+#!/usr/bin/perl
+use strict;
+use warnings;
+use File::Basename qw(dirname);
+use IPC::SysV qw(IPC_PRIVATE IPC_RMID GETVAL);
+
+my $resources = dirname($0);
+if (!@ARGV) {
+    # Terminal reuses its startup shell for additional tabs. Only the first
+    # shell to remove the private semaphore may handle this URL.
+    my ($launcher, $id, $deadline, $url, $home, $xdg) =
+        delete @ENV{qw(MPV_HANDLER_START MPV_HANDLER_CLAIM MPV_HANDLER_DEADLINE
+                       MPV_HANDLER_URL MPV_HANDLER_HOME MPV_HANDLER_XDG)};
+    if (defined $id && $id =~ /^\d+$/ && defined $deadline && time <= $deadline
+            && defined $url && $url =~ m{\Ampv-handler-debug://}
+            && defined semctl($id, 0, IPC_RMID, 0)) {
+        @ENV{qw(HOME XDG_CONFIG_HOME)} = ($home, $xdg);
+        exec "$resources/play", $url or die "Cannot start mpv-handler: $!\n";
+    }
+    exec '/usr/bin/login', '-fpq', scalar getpwuid($<) or die "Cannot start login: $!\n";
+}
+
+@ARGV == 1 && $ARGV[0] =~ m{\Ampv-handler-debug://} or die "Expected one debug URL\n";
+my $claim = semget(IPC_PRIVATE, 1, 0600) // die "Cannot reserve debug session: $!\n";
+END { semctl($claim, 0, IPC_RMID, 0) if defined $claim }
+local $SIG{$_} = sub { exit 1 } for qw(HUP INT TERM);
+my $deadline = time + 60;
+# Terminal splits -Shell on whitespace. Keep this command constant and let
+# the noninteractive shell expand the quoted helper path as a single word.
+system '/usr/bin/open', '-n', '-b', 'com.apple.Terminal',
+    '--env', "MPV_HANDLER_START=$0", '--env', "MPV_HANDLER_CLAIM=$claim",
+    '--env', "MPV_HANDLER_DEADLINE=$deadline", '--env', "MPV_HANDLER_URL=$ARGV[0]",
+    '--env', "MPV_HANDLER_HOME=$ENV{HOME}", '--env', 'MPV_HANDLER_XDG=' . ($ENV{XDG_CONFIG_HOME} // ''),
+    '--args', '-Shell', '/bin/sh -c "$MPV_HANDLER_START"';
+die "Cannot open Terminal\n" if $? != 0;
+while (defined semctl($claim, 0, GETVAL, 0)) {
+    die "Terminal did not start the debug session in time\n" if time > $deadline;
+    select undef, undef, undef, 0.1;
+}
+undef $claim;
+PERL
+chmod 755 "$resources/open-url" "$resources/play" "$resources/debug-terminal"
 
 plist="$bundle/Contents/Info.plist"
 /usr/bin/plutil -replace CFBundleIdentifier -string io.github.xlilu.mpv-handler "$plist"
