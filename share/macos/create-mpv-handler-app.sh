@@ -57,21 +57,47 @@ bundle="$stage/$name"
 resources="$bundle/Contents/Resources"
 printf '%s\n' "$prefix" > "$resources/brew-prefix"
 cat > "$resources/open-url" <<'SH'
-#!/bin/sh
+#!/bin/bash
 set -eu
+
+# Terminal runs this copy as its startup shell. Claim one request, even if
+# the user opens another tab in the same Terminal instance.
+if [[ $# -eq 0 && ${0##*/} == start ]]; then
+    dir=${0%/*}
+    if ! /bin/mv "$dir/request" "$dir/playing" 2>/dev/null; then
+        exec /usr/bin/login -fpq "$(/usr/bin/id -un)"
+    fi
+    {
+        IFS= read -r -d '' handler
+        IFS= read -r -d '' url
+        IFS= read -r -d '' PATH
+        IFS= read -r -d '' HOME
+        IFS= read -r -d '' XDG_CONFIG_HOME
+    } < "$dir/playing"
+    /bin/rm -f "$dir/playing"
+    export PATH HOME XDG_CONFIG_HOME
+    exec "$handler" "$url"
+fi
+
+[[ $# -eq 1 ]] || exit 1
 IFS= read -r prefix < "${0%/*}/brew-prefix"
 export PATH="$prefix/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-case ${1-} in
-    mpv-handler-debug://*)
-        umask 077
-        logdir="$HOME/Library/Logs/mpv-handler"
-        mkdir -p "$logdir"
-        exec >> "$logdir/debug.log" 2>&1
-        ;;
-    mpv-handler://*) ;;
+handler="$prefix/opt/mpv-handler/bin/mpv-handler"
+case $1 in
+    mpv-handler://*) exec "$handler" "$1" ;;
+    mpv-handler-debug://*) ;;
     *) exit 1 ;;
 esac
-exec "$prefix/opt/mpv-handler/bin/mpv-handler" "$1"
+
+# Only the generated startup path is passed to Terminal. Keep the URL and
+# paths as NUL-delimited data so they never become shell command text.
+umask 077
+dir=$(/usr/bin/mktemp -d /tmp/mpv-handler.XXXXXXXX)
+trap '/bin/rm -f "$dir/start" "$dir/request" "$dir/playing"; /bin/rmdir "$dir"' EXIT
+trap 'exit 1' HUP INT TERM
+/usr/bin/install -m 700 "$0" "$dir/start"
+printf '%s\0' "$handler" "$1" "$PATH" "$HOME" "${XDG_CONFIG_HOME:-}" > "$dir/request"
+/usr/bin/open -n -W -b com.apple.Terminal --args -Shell "$dir/start"
 SH
 chmod 755 "$resources/open-url"
 

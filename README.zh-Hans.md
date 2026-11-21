@@ -43,7 +43,7 @@
 ### 协议名
 
 - `mpv-handler`: 在没有命令行窗口的情况下运行 mpv-handler
-- `mpv-handler-debug`：在 Linux 和 Windows 上通过命令行窗口查看调试输出，在 macOS 上通过日志文件查看
+- `mpv-handler-debug` 在终端窗口中运行 mpv-handler，显示输出和错误信息。
 
 ### 插件 / Plugins
 
@@ -115,7 +115,9 @@ brew install xlilu/mpv-handler/mpv-handler
 create-mpv-handler-app
 ```
 
-脚本默认创建 `~/Applications/mpv-handler.app`。如果该位置已有应用，脚本会停止。打开 `mpv-handler-debug://` 链接后，可在 `~/Library/Logs/mpv-handler/debug.log` 查看调试输出。
+脚本默认创建 `~/Applications/mpv-handler.app`。如果该位置已有应用，脚本会停止。普通链接直接启动播放，`mpv-handler-debug://` 链接会打开“终端”窗口，显示输出和错误信息。
+
+如果外壳由 Formula `0.4.2_1` 或更早版本生成，请运行 `brew upgrade xlilu/mpv-handler/mpv-handler`，将旧应用移到废纸篓，再运行 `create-mpv-handler-app` 生成支持调试窗口的新外壳。如果曾指定安装目录，请把同一目录作为参数传给生成命令。
 
 与 Linux 一样，应用默认读取 `~/.config/mpv-handler/config.toml`，并在 `~/.config/mpv-handler/cookies/` 中查找 cookie 文件。如果应用环境中的 `XDG_CONFIG_HOME` 是绝对路径，两者都从 `$XDG_CONFIG_HOME/mpv-handler/` 读取。变量未设置或值为相对路径时，使用默认位置。
 
