@@ -1,8 +1,8 @@
 [English][readme-en] | [简体中文][readme-zh-hans] | [繁体中文][readme-zh-hant]
 
-[readme-en]: https://github.com/akiirui/mpv-handler/blob/main/README.md
-[readme-zh-hans]: https://github.com/akiirui/mpv-handler/blob/main/README.zh-Hans.md
-[readme-zh-hant]: https://github.com/akiirui/mpv-handler/blob/main/README.zh-Hant.md
+[readme-en]: ./README.md
+[readme-zh-hans]: ./README.zh-Hans.md
+[readme-zh-hant]: ./README.zh-Hant.md
 
 # mpv handler
 
@@ -43,7 +43,7 @@ If you installed manually, please repeat the manual installation process.
 ### Scheme
 
 - `mpv-handler`: Run mpv-handler without console window
-- `mpv-handler-debug`: Run mpv-handler with console window to view outputs and errors
+- `mpv-handler-debug`: Show diagnostic output in a console window on Linux and Windows, or in the debug log on macOS
 
 ### Plugins
 
@@ -105,6 +105,17 @@ referrer = [ Encoded URL ]
 
 8. Add `$HOME/.local/bin` to your environment variable `PATH`
 9. **Optional**: _Copy `config.toml` to `$HOME/.config/mpv-handler/config.toml` and configure_
+
+### macOS (Homebrew)
+
+Install the command-line handler, then create the app that opens browser links.
+
+```sh
+brew install xlilu/mpv-handler/mpv-handler
+create-mpv-handler-app
+```
+
+The script creates `~/Applications/mpv-handler.app` and stops if an app already exists at that path. The app writes output from `mpv-handler-debug://` links to `~/Library/Logs/mpv-handler/debug.log`. To customize the handler, create `~/Library/Application Support/mpv-handler/config.toml`.
 
 ### Windows
 

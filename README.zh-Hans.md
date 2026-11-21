@@ -1,8 +1,8 @@
 [English][readme-en] | [简体中文][readme-zh-hans] | [繁体中文][readme-zh-hant]
 
-[readme-en]: https://github.com/akiirui/mpv-handler/blob/main/README.md
-[readme-zh-hans]: https://github.com/akiirui/mpv-handler/blob/main/README.zh-Hans.md
-[readme-zh-hant]: https://github.com/akiirui/mpv-handler/blob/main/README.zh-Hant.md
+[readme-en]: ./README.md
+[readme-zh-hans]: ./README.zh-Hans.md
+[readme-zh-hant]: ./README.zh-Hant.md
 
 # mpv handler
 
@@ -43,7 +43,7 @@
 ### 协议名
 
 - `mpv-handler`: 在没有命令行窗口的情况下运行 mpv-handler
-- `mpv-handler-debug`: 在有命令行窗口的情况下运行 mpv-handler 以便于查看输出和错误
+- `mpv-handler-debug`：在 Linux 和 Windows 上通过命令行窗口查看调试输出，在 macOS 上通过日志文件查看
 
 ### 插件 / Plugins
 
@@ -105,6 +105,17 @@ referrer = [ Encoded URL ]
 
 8. 添加 `$HOME/.local/bin` 到环境变量 `PATH`
 9. **可选**: _复制 `config.toml` 至 `$HOME/.config/mpv-handler/config.toml` 并配置_
+
+### macOS (Homebrew)
+
+先安装命令行程序，再生成用于打开浏览器链接的应用。
+
+```sh
+brew install xlilu/mpv-handler/mpv-handler
+create-mpv-handler-app
+```
+
+脚本默认创建 `~/Applications/mpv-handler.app`。如果该位置已有应用，脚本会停止。打开 `mpv-handler-debug://` 链接后，可在 `~/Library/Logs/mpv-handler/debug.log` 查看调试输出。如需自定义设置，可创建 `~/Library/Application Support/mpv-handler/config.toml`。
 
 ### Windows
 
