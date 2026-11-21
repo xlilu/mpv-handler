@@ -115,7 +115,11 @@ brew install xlilu/mpv-handler/mpv-handler
 create-mpv-handler-app
 ```
 
-脚本默认创建 `~/Applications/mpv-handler.app`。如果该位置已有应用，脚本会停止。打开 `mpv-handler-debug://` 链接后，可在 `~/Library/Logs/mpv-handler/debug.log` 查看调试输出。如需自定义设置，可创建 `~/Library/Application Support/mpv-handler/config.toml`。
+脚本默认创建 `~/Applications/mpv-handler.app`。如果该位置已有应用，脚本会停止。打开 `mpv-handler-debug://` 链接后，可在 `~/Library/Logs/mpv-handler/debug.log` 查看调试输出。
+
+与 Linux 一样，应用默认读取 `~/.config/mpv-handler/config.toml`，并在 `~/.config/mpv-handler/cookies/` 中查找 cookie 文件。如果应用环境中的 `XDG_CONFIG_HOME` 是绝对路径，两者都从 `$XDG_CONFIG_HOME/mpv-handler/` 读取。变量未设置或值为相对路径时，使用默认位置。
+
+如果此前的 Homebrew 版本在 `~/Library/Application Support/mpv-handler/` 中保存了配置，可将其中的 `config.toml` 和 `cookies/` 下的文件按原目录结构复制到当前配置目录，跳过已有的同名文件。
 
 #### 卸载
 

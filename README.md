@@ -115,7 +115,11 @@ brew install xlilu/mpv-handler/mpv-handler
 create-mpv-handler-app
 ```
 
-The script creates `~/Applications/mpv-handler.app` and stops if an app already exists at that path. The app writes output from `mpv-handler-debug://` links to `~/Library/Logs/mpv-handler/debug.log`. To customize the handler, create `~/Library/Application Support/mpv-handler/config.toml`.
+The script creates `~/Applications/mpv-handler.app` and stops if an app already exists at that path. The app writes output from `mpv-handler-debug://` links to `~/Library/Logs/mpv-handler/debug.log`.
+
+As on Linux, the app reads `~/.config/mpv-handler/config.toml` and looks for cookie files in `~/.config/mpv-handler/cookies/`. If `XDG_CONFIG_HOME` is an absolute path in the app's environment, the app uses `$XDG_CONFIG_HOME/mpv-handler/` for both. An unset or relative value uses the default paths.
+
+If you have settings from an earlier Homebrew installation in `~/Library/Application Support/mpv-handler/`, copy `config.toml` and any files under `cookies/` to the same locations in the active configuration directory. Skip files that already exist there.
 
 #### Uninstall
 
