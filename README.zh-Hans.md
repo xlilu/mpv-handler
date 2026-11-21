@@ -117,6 +117,16 @@ create-mpv-handler-app
 
 脚本默认创建 `~/Applications/mpv-handler.app`。如果该位置已有应用，脚本会停止。打开 `mpv-handler-debug://` 链接后，可在 `~/Library/Logs/mpv-handler/debug.log` 查看调试输出。如需自定义设置，可创建 `~/Library/Application Support/mpv-handler/config.toml`。
 
+#### 卸载
+
+在 Finder 中把 `~/Applications/mpv-handler.app` 移到废纸篓。如果生成时指定了其他目录，请移除该目录里的应用。然后在终端卸载命令行程序。
+
+```sh
+brew uninstall xlilu/mpv-handler/mpv-handler
+```
+
+如果也想移除这个 Tap，运行 `brew untap xlilu/mpv-handler`。
+
 ### Windows
 
 Windows 用户目前只能手动安装。

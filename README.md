@@ -117,6 +117,16 @@ create-mpv-handler-app
 
 The script creates `~/Applications/mpv-handler.app` and stops if an app already exists at that path. The app writes output from `mpv-handler-debug://` links to `~/Library/Logs/mpv-handler/debug.log`. To customize the handler, create `~/Library/Application Support/mpv-handler/config.toml`.
 
+#### Uninstall
+
+In Finder, move `~/Applications/mpv-handler.app` to the Trash. If you created the app in another directory, move that copy to the Trash instead. Then uninstall the command-line handler.
+
+```sh
+brew uninstall xlilu/mpv-handler/mpv-handler
+```
+
+To remove the tap as well, run `brew untap xlilu/mpv-handler`.
+
 ### Windows
 
 Windows users need to install manually.
