@@ -106,10 +106,10 @@ referrer = [ Encoded URL ]
 8. 添加 `$HOME/.local/bin` 到環境變量 `PATH`
 9. **可選**: _複製 `config.toml` 至 `$HOME/.config/mpv-handler/config.toml` 並配置_
 
-### macOS（Apple Silicon 與 Intel）
+### macOS
 
 1. 安裝 mpv 和 yt-dlp。使用 Homebrew 可執行 `brew install mpv yt-dlp`。
-2. 解壓縮 [macOS 安裝包][download-macos]，在解壓縮後的目錄執行 `sh install.sh`。指令會在本機建立 `~/Applications/mpv-handler.app` 並註冊兩個通訊協定。升級時執行同一條指令即可。
+2. 解壓縮 [macOS 預發行安裝包][download-macos]，在解壓縮後的目錄執行 `sh install.sh`。指令會在本機建立 `~/Applications/mpv-handler.app` 並註冊兩個通訊協定。升級時執行同一條指令即可。
 
 <details>
 <summary>如果 macOS 提示 Apple 無法驗證 mpv-handler</summary>
@@ -166,7 +166,7 @@ proxy = "http://example.com:8080"
 [download-aur-git]: https://aur.archlinux.org/packages/mpv-handler-git/
 [download-aur]: https://aur.archlinux.org/packages/mpv-handler/
 [download-linux]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-linux-amd64.zip
-[download-macos]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-macos-universal.zip
+[download-macos]: https://github.com/xlilu/mpv-handler/releases/download/macos-0.4.2-3-rc.1/mpv-handler-macos-universal.zip
 [download-windows]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-windows-amd64.zip
 [greasyfork-play-with-mpv]: https://greasyfork.org/scripts/416271-play-with-mpv
 [linuxuprising]: https://www.linuxuprising.com/2021/07/open-youtube-and-more-videos-from-your.html

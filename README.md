@@ -106,10 +106,10 @@ referrer = [ Encoded URL ]
 8. Add `$HOME/.local/bin` to your environment variable `PATH`
 9. **Optional**: _Copy `config.toml` to `$HOME/.config/mpv-handler/config.toml` and configure_
 
-### macOS (Apple Silicon and Intel)
+### macOS
 
 1. Install mpv and yt-dlp (with Homebrew, run `brew install mpv yt-dlp`).
-2. Unzip the [macOS release][download-macos]. In the extracted folder, run `sh install.sh` to create `~/Applications/mpv-handler.app` and register both URL schemes. Run the same command to upgrade.
+2. Unzip the [macOS prerelease][download-macos]. In the extracted folder, run `sh install.sh` to create `~/Applications/mpv-handler.app` and register both URL schemes. Run the same command to upgrade.
 
 <details>
 <summary>If macOS says Apple could not verify mpv-handler</summary>
@@ -166,7 +166,7 @@ proxy = "http://example.com:8080"
 [download-aur-git]: https://aur.archlinux.org/packages/mpv-handler-git/
 [download-aur]: https://aur.archlinux.org/packages/mpv-handler/
 [download-linux]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-linux-amd64.zip
-[download-macos]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-macos-universal.zip
+[download-macos]: https://github.com/xlilu/mpv-handler/releases/download/macos-0.4.2-3-rc.1/mpv-handler-macos-universal.zip
 [download-windows]: https://github.com/akiirui/mpv-handler/releases/latest/download/mpv-handler-windows-amd64.zip
 [greasyfork-play-with-mpv]: https://greasyfork.org/scripts/416271-play-with-mpv
 [linuxuprising]: https://www.linuxuprising.com/2021/07/open-youtube-and-more-videos-from-your.html
