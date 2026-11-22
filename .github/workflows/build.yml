@@ -54,16 +54,19 @@ jobs:
           release=target/${{ matrix.target }}/release
           rustup target add x86_64-apple-darwin
           cargo build --release --locked --target x86_64-apple-darwin
-          lipo -create "$release/mpv-handler" target/x86_64-apple-darwin/release/mpv-handler -output target/mpv-handler-universal
           package=${{ matrix.asset_name }}
-          app="$package/mpv-handler.app"
           mkdir "$package"
-          sh share/macos/bundle.sh target/mpv-handler-universal "$app"
+          lipo -create "$release/mpv-handler" target/x86_64-apple-darwin/release/mpv-handler -output "$package/mpv-handler"
+          cp LICENSE README*.md share/linux/config.toml share/macos/* "$package/"
+          archive="$release/${{ matrix.artifact_name }}"
+          ditto -c -k --norsrc "$package" "$archive"
+          ditto -x -k "$archive" "$RUNNER_TEMP/unpacked"
+          sh "$RUNNER_TEMP/unpacked/install.sh" "$RUNNER_TEMP/Applications"
+          # Exercise the upgrade path as well as a clean installation.
+          sh "$RUNNER_TEMP/unpacked/install.sh" "$RUNNER_TEMP/Applications"
+          app="$RUNNER_TEMP/Applications/mpv-handler.app"
           lipo "$app/Contents/MacOS/applet" -verify_arch arm64 x86_64
           lipo "$app/Contents/MacOS/mpv-handler" -verify_arch arm64 x86_64
-          codesign --verify --deep --strict --all-architectures "$app"
-          cp LICENSE README*.md share/linux/config.toml "$package/"
-          ditto -c -k --norsrc "$package" "$release/${{ matrix.artifact_name }}"
 
       - name: Upload to artifact
         uses: actions/upload-artifact@v7
@@ -87,6 +90,7 @@ jobs:
           path: target/${{ matrix.target }}/release/${{ matrix.artifact_name_debug }}
 
   publish:
+    if: github.ref_type == 'tag'
     needs: build
     runs-on: ubuntu-latest
     steps:

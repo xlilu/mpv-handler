@@ -109,7 +109,7 @@ referrer = [ Encoded URL ]
 ### macOS（Apple Silicon 和 Intel）
 
 1. 安装 mpv 和 yt-dlp。使用 Homebrew 可运行 `brew install mpv yt-dlp`。
-2. 解压 [macOS 安装包][download-macos]，将 `mpv-handler.app` 拖入“应用程序”，打开一次即可注册两个协议。
+2. 解压 [macOS 安装包][download-macos]，在解压目录运行 `sh install.sh`。脚本会在本机生成 `~/Applications/mpv-handler.app` 并注册两个协议。升级时运行同一条命令即可。
 
    如果 macOS 提示 Apple 无法验证 `mpv-handler`，先点“完成”。如果你信任该下载来源，打开“系统设置”→“隐私与安全性”，在“安全性”中找到 `mpv-handler`，点“仍要打开”并确认。如果看不到这个按钮，在访达中再次双击该应用，然后回到设置查看。[Apple 官方说明](https://support.apple.com/zh-cn/102445)
 
@@ -117,7 +117,7 @@ referrer = [ Encoded URL ]
 
 和 Linux 一样，应用从 `~/.config/mpv-handler/config.toml` 和 `~/.config/mpv-handler/cookies/` 读取配置和 cookies。若应用环境中的 `XDG_CONFIG_HOME` 是绝对路径，则用它替代 `~/.config`。
 
-要为本机架构构建，可在仓库根目录运行 `cargo build --release --locked && sh share/macos/bundle.sh target/release/mpv-handler mpv-handler.app`。通用应用的构建步骤见[发布工作流](.github/workflows/build.yml)。
+要为本机架构构建，可在仓库根目录运行 `cargo build --release --locked && sh share/macos/bundle.sh target/release/mpv-handler mpv-handler.app`。发布的 ZIP 已包含预编译的通用二进制。
 
 ### Windows
 
