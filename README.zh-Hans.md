@@ -111,6 +111,8 @@ referrer = [ Encoded URL ]
 1. 安装 mpv 和 yt-dlp。使用 Homebrew 可运行 `brew install mpv yt-dlp`。
 2. 解压 [macOS 安装包][download-macos]，将 `mpv-handler.app` 拖入“应用程序”，打开一次即可注册两个协议。
 
+在 macOS 上，`mpv-handler-debug://` 调试链接需要安装 iTerm2。
+
 <details>
 <summary>如果 macOS 提示 Apple 无法验证 mpv-handler</summary>
 

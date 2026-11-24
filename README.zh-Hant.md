@@ -111,6 +111,8 @@ referrer = [ Encoded URL ]
 1. 安裝 mpv 和 yt-dlp。使用 Homebrew 可執行 `brew install mpv yt-dlp`。
 2. 解壓縮 [macOS 安裝包][download-macos]，將 `mpv-handler.app` 拖入「應用程式」，開啟一次即可註冊兩個通訊協定。
 
+在 macOS 上，`mpv-handler-debug://` 偵錯連結需要安裝 iTerm2。
+
 <details>
 <summary>如果 macOS 提示 Apple 無法驗證 mpv-handler</summary>
 

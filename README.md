@@ -111,6 +111,8 @@ referrer = [ Encoded URL ]
 1. Install mpv and yt-dlp (with Homebrew, run `brew install mpv yt-dlp`).
 2. Unzip the [macOS release][download-macos], move `mpv-handler.app` to Applications and open it once to register both URL schemes.
 
+On macOS, `mpv-handler-debug://` links require iTerm2.
+
 <details>
 <summary>If macOS says Apple could not verify mpv-handler</summary>
 
