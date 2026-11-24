@@ -10,6 +10,7 @@ plutil -replace CFBundleIdentifier -string io.github.akiirui.mpv-handler "$plist
 plutil -replace LSUIElement -bool YES "$plist"
 plutil -replace CFBundleURLTypes -json '[{"CFBundleTypeRole":"Viewer","CFBundleURLName":"mpv-handler","CFBundleURLSchemes":["mpv-handler","mpv-handler-debug"]}]' "$plist"
 install -m 755 "$src/open-url" "$app/Contents/Resources/open-url"
+install -m 644 "$src/terminal.zsh" "$app/Contents/Resources/terminal.zsh"
 install -m 755 "$1" "$app/Contents/MacOS/mpv-handler"
 codesign --force --sign - "$app/Contents/MacOS/mpv-handler"
 codesign --force --sign - "$app"

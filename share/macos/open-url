@@ -1,33 +1,19 @@
-#!/bin/bash
+#!/bin/sh
 set -eu
 
-# Terminal starts this helper directly, before any interactive shell or prompt.
-if [[ $# -eq 0 ]]; then
-    dir=${0%/*}
-    if ! /bin/mv "$dir/request" "$dir/playing" 2>/dev/null; then
-        # Additional tabs in this Terminal instance get the user's login shell.
-        exec /usr/bin/login -fpq "$(/usr/bin/id -un)"
-    fi
-    {
-        IFS= read -r -d '' handler
-        IFS= read -r -d '' url
-        IFS= read -r -d '' PATH
-        IFS= read -r -d '' XDG_CONFIG_HOME
-    } < "$dir/playing"
-    /bin/rm -f "$dir/playing"
-    export PATH XDG_CONFIG_HOME
-    exec "$handler" "$url"
-fi
-
-handler="${0%/*}/../MacOS/mpv-handler"
+[ "$#" -gt 0 ] || exit 0
 export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
-if [[ $1 != mpv-handler-debug://* ]]; then
-    exec "$handler" "$1"
-fi
-
-# A single-word startup path also works when the app's path contains spaces.
-dir=$(mktemp -d /tmp/mpv-handler.XXXXXXXX)
-trap 'rm -f "$dir/start" "$dir/request" "$dir/playing"; rmdir "$dir"' EXIT
-install -m 700 "$0" "$dir/start"
-printf '%s\0' "$handler" "$1" "$PATH" "${XDG_CONFIG_HOME:-}" > "$dir/request"
-/usr/bin/open -n -W -b com.apple.Terminal --args -Shell "$dir/start"
+case $1 in
+    mpv-handler-debug://*)
+        umask 077
+        root="$HOME/Library/Caches/mpv-handler/requests"
+        /bin/mkdir -p "$root"
+        [ ! -L "$root" ] && [ -O "$root" ] && [ "$(/usr/bin/stat -f %Lp "$root")" = 700 ] || exit 1
+        dir=$(/usr/bin/mktemp -d "$root/request.XXXXXXXX")
+        trap '/bin/rm -f "$dir/request"; /bin/rmdir "$dir" 2>/dev/null || :' EXIT
+        printf '%s\0' "$1" "$PATH" "${XDG_CONFIG_HOME:-}" > "$dir/request"
+        /usr/bin/open -b com.apple.Terminal "$dir"
+        trap - EXIT
+        ;;
+    *) exec "${0%/*}/../MacOS/mpv-handler" "$1" ;;
+esac
