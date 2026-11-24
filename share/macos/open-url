@@ -1,3 +1,10 @@
 #!/bin/sh
 export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
+case ${1-} in
+    mpv-handler-debug://*)
+        if [ -t 1 ]; then
+            printf '\033[2J\033[3J\033[H'
+        fi
+        ;;
+esac
 exec "${0%/*}/../MacOS/mpv-handler" "$@"
