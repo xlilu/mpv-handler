@@ -9,6 +9,7 @@ using terms from application "/System/Library/ScriptingAdditions/StandardAdditio
             set configHome to system attribute "XDG_CONFIG_HOME"
             if configHome is not "" then set commandText to "/usr/bin/env " & quoted form of ("XDG_CONFIG_HOME=" & configHome) & " " & commandText
             tell application "/System/Applications/Utilities/Terminal.app"
+                launch
                 do script ("exec " & commandText)
                 activate
             end tell
