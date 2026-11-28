@@ -25,6 +25,39 @@ fn main() -> ExitCode {
 /// Run handler
 fn run() -> Result<(), Error> {
     let args: Vec<String> = std::env::args().collect();
+    #[cfg(target_os = "macos")]
+    if let [program] = args.as_slice()
+        && std::path::Path::new(program).ends_with("mpv-handler-debug")
+        && let Ok(url) = std::env::var("MPV_HANDLER_URL")
+        && url.starts_with("mpv-handler-debug://")
+    {
+        use std::io::{IsTerminal, Write};
+        use std::os::unix::process::CommandExt;
+
+        let mut stdout = std::io::stdout().lock();
+        if stdout.is_terminal() {
+            stdout.write_all(b"\x1b[2J\x1b[3J\x1b[H")?;
+            stdout.flush()?;
+        }
+
+        // Terminal opens the executable as a document, without arguments.
+        let error = std::process::Command::new(std::env::current_exe()?)
+            .arg(url)
+            .env(
+                "PATH",
+                std::env::var_os("MPV_HANDLER_PATH").unwrap_or_default(),
+            )
+            .env(
+                "XDG_CONFIG_HOME",
+                std::env::var_os("MPV_HANDLER_XDG").unwrap_or_default(),
+            )
+            .env_remove("MPV_HANDLER_URL")
+            .env_remove("MPV_HANDLER_PATH")
+            .env_remove("MPV_HANDLER_XDG")
+            .exec();
+        return Err(error.into());
+    }
+
     let arg: &str = match args.len() {
         2 => &args[1],
         1 => return Ok(print_usage()),

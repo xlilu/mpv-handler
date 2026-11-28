@@ -1,25 +1,18 @@
 #!/bin/sh
 set -eu
 
+bin="${0%/*}/../MacOS"
+# Terminal opens this file without arguments. Shell exec preserves the debug entry name.
 if [ "$#" -eq 0 ]; then
-    # Terminal opens this .command document without arguments.
-    [ -n "${MPV_HANDLER_URL:-}" ] || exit 0
-    set -- "$MPV_HANDLER_URL"
-    export PATH="$MPV_HANDLER_PATH" XDG_CONFIG_HOME="$MPV_HANDLER_XDG"
-    unset MPV_HANDLER_URL MPV_HANDLER_PATH MPV_HANDLER_XDG
-    if [ -t 1 ]; then
-        printf '\033[2J\033[3J\033[H'
-    fi
-else
-    case $1 in
-        mpv-handler-debug://*)
-            # A new Terminal instance receives this URL without changing its default shell.
-            exec /usr/bin/open -n -b com.apple.Terminal \
-                --env "MPV_HANDLER_URL=$1" --env "MPV_HANDLER_PATH=$PATH" \
-                --env "MPV_HANDLER_XDG=${XDG_CONFIG_HOME:-}" "$0"
-            ;;
-    esac
+    exec "$bin/mpv-handler-debug"
 fi
-
 export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
-exec "${0%/*}/../MacOS/mpv-handler" "$1"
+case $1 in
+    mpv-handler-debug://*)
+        exec /usr/bin/open -n -b com.apple.Terminal \
+            --env "MPV_HANDLER_URL=$1" --env "MPV_HANDLER_PATH=$PATH" \
+            --env "MPV_HANDLER_XDG=${XDG_CONFIG_HOME:-}" "$0"
+        ;;
+esac
+
+exec "$bin/mpv-handler" "$1"
